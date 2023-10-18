@@ -40,11 +40,24 @@ async function run() {
 
     const database= client.db("brandShopDB");
     const brandsCollection  = database.collection("brands");
+    const productCollection  = database.collection("product");
 
     app.get('/brands', async(req, res)=>{
         const brands = brandsCollection.find();
         const result= await brands.toArray();
         res.send(result)
+    })
+
+    app.get('/product', async(req, res)=>{
+        const cursor =productCollection.find();
+        const result = await cursor.toArray();
+        res.send(result)
+    })
+
+    app.post('/product', async(req, res)=>{
+        const user = req.body;
+        const result = await productCollection.insertOne(user);
+        res.send(result);
     })
 
   } finally {
