@@ -50,7 +50,6 @@ async function run() {
 
     app.get('/product/:name', async(req, res)=>{
         const name = req.params.name.replace(" ", "-");
-        console.log(name)
         const cursor =productCollection.find({brand:name});
         const result = await cursor.toArray();
         res.send(result)
@@ -58,8 +57,34 @@ async function run() {
     app.get('/product/details/:id', async(req, res)=>{
         const id = req.params.id;
         const cursor =await productCollection.findOne({_id: new ObjectId(id)});
-        console.log(cursor)
         res.send(cursor)
+    })
+
+    app.get('/product/:id', async(req, res)=>{
+        const id = req.params.id;
+        const query= {_id: new ObjectId(id)};
+        const result = await productCollection.findOne(query);
+        res.send(result);
+    })
+
+    app.put('/product/:id', async(req, res)=>{
+        const id =req.params.id;
+        const filter = {_id: new ObjectId(id)};
+        const options ={upsert:true}
+        const updateProduct =req.body;
+        const product ={
+            $set:{
+                name:updateProduct.name,
+                brand:updateProduct.brand,
+                price:updateProduct.price,
+                ratting:updateProduct.ratting,
+                img:updateProduct.img,
+                textArea :updateProduct.textArea
+
+            }
+        }
+        const result =  await productCollection.updateOne(filter, product, options);
+        res.send(result)
     })
      
 
