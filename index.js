@@ -105,6 +105,7 @@ async function run() {
                 price:updateProduct.price,
                 rating:updateProduct.rating,
                 img:updateProduct.img,
+                type:updateProduct.type,
                 description :updateProduct.description
 
             }
