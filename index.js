@@ -55,6 +55,13 @@ async function run() {
         const result = await cursor.toArray();
         res.send(result)
     })
+    app.get('/brands/:name', async(req, res)=>{
+        const name = req.params.name;
+        const cursor =await brandsCollection.findOne({brand_name: name});
+        res.send(cursor)
+    })
+
+
     app.get('/product/details/:id', async(req, res)=>{
         const id = req.params.id;
         const cursor =await productCollection.findOne({_id: new ObjectId(id)});
