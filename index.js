@@ -41,6 +41,7 @@ async function run() {
     const database= client.db("brandShopDB");
     const brandsCollection  = database.collection("brands");
     const productCollection  = database.collection("product");
+    const cartsCollection  = database.collection("carts");
 
     app.get('/brands', async(req, res)=>{
         const brands = brandsCollection.find();
@@ -65,6 +66,23 @@ async function run() {
         const query= {_id: new ObjectId(id)};
         const result = await productCollection.findOne(query);
         res.send(result);
+    })
+    app.get('/cart/:email', async(req, res)=>{
+      const email = req.params.email;
+      const result = await cartsCollection.findOne({email:email});
+      res.send(result)
+    })
+
+    app.put('/cart/:email', async(req,res)=>{
+      const email = req.params.email;
+    const product = req.body;
+    const updateResult = await cartsCollection.updateOne(
+      { email },
+      { $set: { email, product } },
+      { upsert: true }
+    );
+      console.log(updateResult)
+     res.send(updateResult)
     })
 
     app.put('/product/:id', async(req, res)=>{
